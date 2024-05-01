@@ -1,24 +1,27 @@
-package com.example.batch.application;
+package com.example.batch.application.dormant;
 
 import com.example.batch.EmailProvider;
 import com.example.batch.batch.ItemWriter;
 import com.example.batch.customer.Customer;
 import com.example.batch.customer.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DormantBatchItemWriter implements ItemWriter<Customer> {
-    private final CustomerRepository customerRepository;
+public class PreDormantBatchWriter implements ItemWriter<Customer> {
     private final EmailProvider emailProvider;
 
-    public DormantBatchItemWriter(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
+    @Autowired
+    public PreDormantBatchWriter() {
         this.emailProvider = new EmailProvider.Fake();
+    }
+
+    public PreDormantBatchWriter(EmailProvider emailProvider) {
+        this.emailProvider = emailProvider;
     }
 
     @Override
     public void write(Customer item) {
-        customerRepository.save(item);
         emailProvider.send(item.getEmail(), "휴면 전환 안내", "내용");
     }
 }

@@ -3,6 +3,7 @@ package com.example.batch;
 import com.example.batch.batch.BatchStatus;
 import com.example.batch.batch.Job;
 import com.example.batch.batch.JobExecution;
+import com.example.batch.batch.TaskletJob;
 import com.example.batch.customer.Customer;
 import com.example.batch.customer.CustomerRepository;
 import org.assertj.core.api.Assertions;
@@ -94,11 +95,22 @@ class DormantBatchJobTest {
     @Test
     @DisplayName("배치 실패")
     void test4(){
-        final Job dormantBatchJob = new Job(null, null);
+        final Job dormantBatchJob = new TaskletJob(null);
 
         final JobExecution result = dormantBatchJob.execute();
 
         Assertions.assertThat(result.getStatus()).isEqualTo(BatchStatus.FAILED);
+    }
+
+    @Test
+    @DisplayName("358일 전")
+    void test5(){
+        saveCustomer(358);
+        saveCustomer(358);
+        saveCustomer(357);
+        saveCustomer(359);
+
+        final JobExecution result = dormantBatchJob.execute();
     }
 
     private void saveCustomer(long loginMinusDays) {

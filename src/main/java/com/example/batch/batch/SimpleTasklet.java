@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-@Component
 public class SimpleTasklet<T, D> implements Tasklet {
 
     private final ItemReader<T> itemReader;
